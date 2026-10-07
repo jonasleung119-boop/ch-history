@@ -201,8 +201,12 @@
       text-align: left;
       perspective: 1000px;
       cursor: pointer;
+      display: block;
+      width: 100%;
+      position: relative;
       min-height: 170px;
       padding: 0;
+      touch-action: manipulation;
     }
 
     .flashcard-inner {
@@ -212,6 +216,7 @@
       min-height: 170px;
       transform-style: preserve-3d;
       transition: transform 0.7s var(--ease);
+      will-change: transform;
     }
 
     .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
@@ -221,6 +226,7 @@
       inset: 0;
       border-radius: 18px;
       backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
       border: 1px solid #ececf1;
       padding: 14px;
       display: flex;
@@ -228,6 +234,7 @@
       justify-content: center;
       gap: 8px;
       box-shadow: var(--soft-shadow);
+      overflow: hidden;
     }
 
     .front {
@@ -246,6 +253,46 @@
       font-size: 0.78rem;
       letter-spacing: 0.08em;
       opacity: 0.78;
+    }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      padding: 3px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      opacity: 0.92;
+    }
+
+    .status-loading {
+      background: rgba(246, 200, 84, 0.18);
+      color: #fde5a6;
+    }
+
+    .status-ready {
+      background: rgba(120, 213, 170, 0.2);
+      color: #cdf5de;
+    }
+
+    .status-failed {
+      background: rgba(255, 120, 120, 0.16);
+      color: #ffd2d2;
+    }
+
+    .back-content {
+      display: grid;
+      gap: 5px;
+      line-height: 1.55;
+      font-size: 0.9rem;
+    }
+
+    .back-content b {
+      color: #f8d699;
+      font-weight: 700;
+      margin-right: 4px;
     }
 
     .quiz-options {
@@ -413,29 +460,122 @@
       {
         policy: "青苗法",
         cue: "理財線",
-        metaphor: "像學校先借你學期必需品基金，期末再還，避免你去借超高利息。"
+        keyPoint: "在最缺現金的播種期提供低息借貸，降低被高利貸綁架風險。",
+        metaphor: "像學校先借你學期必需品基金，期末再還，避免你去借超高利息。",
+        extensionTip: "觀察重點：它要解決的是「資金時點錯配」，不是直接發補助。"
       },
       {
         policy: "免役法",
         cue: "理財線",
-        metaphor: "像把零散義務改成透明費率，大家知道自己要付多少，也比較公平。"
+        keyPoint: "把傳統勞役改為繳納役錢，讓制度更可預測並減少臨時抽調。",
+        metaphor: "像把零散義務改成透明費率，大家知道自己要付多少，也比較公平。",
+        extensionTip: "比較角度：看不同階層負擔是否更平均，是此法爭議焦點。"
       },
       {
         policy: "均輸法",
         cue: "理財線",
-        metaphor: "像大型物流平台調貨，哪裡缺貨就補哪裡，防止中間商亂抬價。"
+        keyPoint: "利用跨區調度平衡供需，壓低運輸和價格波動造成的額外成本。",
+        metaphor: "像大型物流平台調貨，哪裡缺貨就補哪裡，防止中間商亂抬價。",
+        extensionTip: "學習提示：把它想成政府版供應鏈管理，不是單純管制市場。"
       },
       {
         policy: "保甲法",
         cue: "強兵線",
-        metaphor: "像社區平時就編組演練，真有突發狀況才能快速協作，不會全場當機。"
+        keyPoint: "透過地方戶籍編組與訓練，建立平時治安與戰時動員的基層網絡。",
+        metaphor: "像社區平時就編組演練，真有突發狀況才能快速協作，不會全場當機。",
+        extensionTip: "理解方式：它在治理上同時是社會控制與公共安全機制。"
       },
       {
         policy: "保馬法",
         cue: "強兵線",
-        metaphor: "像平時建立交通備援車隊，危機來時不用臨時高價搶資源。"
+        keyPoint: "把戰馬飼養責任制度化，減少戰時臨時徵集帶來的高成本與低效率。",
+        metaphor: "像平時建立交通備援車隊，危機來時不用臨時高價搶資源。",
+        extensionTip: "考試常問：此法和保甲法如何共同支撐「強兵」目標。"
       }
     ];
+
+    const flashcardState = new Map();
+
+    function defaultGeneratedInfo(item) {
+      return {
+        keyPoint: item.keyPoint || "政策重點尚待補充，請回到正面再翻一次重試。",
+        metaphor: item.metaphor || "白話比喻暫時無法載入。",
+        extensionTip: item.extensionTip || "延伸提示暫時無法載入。"
+      };
+    }
+
+    function generatePolicyInfo(item) {
+      return new Promise((resolve, reject) => {
+        window.setTimeout(() => {
+          if (!item?.policy || !item?.metaphor) {
+            reject(new Error("Missing required policy data."));
+            return;
+          }
+          resolve(defaultGeneratedInfo(item));
+        }, 260);
+      });
+    }
+
+    function statusChipClass(status) {
+      if (status === "loading") return "status-chip status-loading";
+      if (status === "ready") return "status-chip status-ready";
+      return "status-chip status-failed";
+    }
+
+    function statusChipLabel(status) {
+      if (status === "loading") return "生成中";
+      if (status === "ready") return "已生成";
+      return "生成失敗";
+    }
+
+    function backContentHtml(info) {
+      return `
+        <span><b>政策重點：</b>${info.keyPoint}</span>
+        <span><b>白話比喻：</b>${info.metaphor}</span>
+        <span><b>延伸提示：</b>${info.extensionTip}</span>
+      `;
+    }
+
+    function renderBackFace(card, status, info) {
+      const statusEl = card.querySelector(".status-chip");
+      const contentEl = card.querySelector(".back-content");
+      if (!statusEl || !contentEl) return;
+      statusEl.className = statusChipClass(status);
+      statusEl.textContent = statusChipLabel(status);
+      contentEl.innerHTML = backContentHtml(info);
+    }
+
+    async function ensureFlashcardInfo(card, item, cardKey) {
+      const current = flashcardState.get(cardKey);
+      if (current?.status === "loading" || current?.status === "ready") {
+        renderBackFace(card, current.status, current.info);
+        return;
+      }
+
+      const loadingInfo = defaultGeneratedInfo({
+        ...item,
+        keyPoint: "正在整理政策重點...",
+        metaphor: "正在生成白話比喻...",
+        extensionTip: "正在整理延伸提示..."
+      });
+      flashcardState.set(cardKey, { status: "loading", info: loadingInfo });
+      renderBackFace(card, "loading", loadingInfo);
+
+      try {
+        const generated = await generatePolicyInfo(item);
+        flashcardState.set(cardKey, { status: "ready", info: generated });
+        renderBackFace(card, "ready", generated);
+      } catch (error) {
+        const fallback = defaultGeneratedInfo({
+          ...item,
+          keyPoint: "資料載入失敗，已使用預設備援重點。",
+          extensionTip: "請稍後再翻面重試，或檢查資料來源。"
+        });
+        flashcardState.set(cardKey, { status: "failed", info: fallback });
+        renderBackFace(card, "failed", fallback);
+        console.error(error);
+      }
+    }
 
     const quiz = {
       question: "下列哪一個說法最符合王安石變法的核心目標？",
@@ -465,11 +605,12 @@
 
     function renderFlashcards() {
       flashcardsEl.innerHTML = "";
-      flashcards.forEach((item) => {
+      flashcards.forEach((item, index) => {
         const card = document.createElement("button");
         card.type = "button";
         card.className = "flashcard";
         card.setAttribute("aria-label", `${item.policy}記憶閃卡，點擊翻面`);
+        const cardKey = `${item.policy}-${index}`;
         card.innerHTML = `
           <span class="flashcard-inner">
             <span class="face front">
@@ -477,12 +618,22 @@
               <strong>${item.policy}</strong>
             </span>
             <span class="face back">
-              <span class="small">中學生白話版</span>
-              <span>${item.metaphor}</span>
+              <span class="small">翻面後自動生成學習資訊</span>
+              <span class="status-chip status-loading">待生成</span>
+              <span class="back-content">
+                <span><b>政策重點：</b>點擊翻面後載入</span>
+                <span><b>白話比喻：</b>點擊翻面後載入</span>
+                <span><b>延伸提示：</b>點擊翻面後載入</span>
+              </span>
             </span>
           </span>
         `;
-        card.addEventListener("click", () => card.classList.toggle("flipped"));
+        card.addEventListener("click", () => {
+          card.classList.toggle("flipped");
+          if (card.classList.contains("flipped")) {
+            ensureFlashcardInfo(card, item, cardKey);
+          }
+        });
         flashcardsEl.appendChild(card);
       });
     }
