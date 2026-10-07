@@ -189,110 +189,97 @@
     }
 
     .cards {
-      margin-top: 12px;
+      margin-top: 14px;
       display: grid;
-      gap: 12px;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
     }
 
     .flashcard {
       border: 0;
+      appearance: none;
+      -webkit-appearance: none;
       background: transparent;
       text-align: left;
-      perspective: 1000px;
       cursor: pointer;
       display: block;
       width: 100%;
+      height: 190px;
+      min-height: 190px;
       position: relative;
-      min-height: 170px;
       padding: 0;
+      overflow: visible;
       touch-action: manipulation;
+      outline: none;
+      perspective: 1000px;
+      -webkit-perspective: 1000px;
     }
 
-    .flashcard-inner {
+    .flashcard-layer {
       position: relative;
       width: 100%;
       height: 100%;
-      min-height: 170px;
-      transform-style: preserve-3d;
-      transition: transform 0.7s var(--ease);
-      will-change: transform;
-    }
-
-    .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
-
-    .face {
-      position: absolute;
-      inset: 0;
-      border-radius: 18px;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-      border: 1px solid #ececf1;
-      padding: 14px;
+      border-radius: 16px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 8px;
-      box-shadow: var(--soft-shadow);
-      overflow: hidden;
+      align-items: center;
+      text-align: center;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.35s var(--ease);
+      border: 2px solid #e6e7ec;
+      background: linear-gradient(155deg, #fff, #f8f9fc);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
     }
 
-    .front {
-      background: linear-gradient(155deg, #fff, #f4f5f8);
-      color: var(--space-black);
+    .flashcard-layer:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      border-color: #d0d1d9;
+      background: linear-gradient(155deg, #fff, #fff);
     }
 
-    .back {
-      background: linear-gradient(155deg, #1f1f22, #29292d);
+    .flashcard-layer:active {
+      transform: scale(0.985);
+    }
+
+    .flashcard-layer.flipped {
+      background: linear-gradient(155deg, #1f1f22, #2a2a2e);
+      border-color: #3a3a42;
       color: #f3f4f8;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
       transform: rotateY(180deg);
     }
 
-    .front .small,
-    .back .small {
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      opacity: 0.78;
+    .flashcard-layer.flipped:hover {
+      border-color: #4a4a52;
+      background: linear-gradient(155deg, #252528, #323236);
+      transform: rotateY(180deg) translateY(-2px) scale(1.01);
     }
 
-    .status-chip {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      border-radius: 999px;
-      font-size: 0.72rem;
-      letter-spacing: 0.04em;
-      padding: 3px 8px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      opacity: 0.92;
+    .flashcard-cue {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      opacity: 0.65;
+      margin-bottom: 6px;
     }
 
-    .status-loading {
-      background: rgba(246, 200, 84, 0.18);
-      color: #fde5a6;
+    .flashcard-text {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      font-weight: 600;
+      font-family: "Noto Serif TC", "Source Han Serif TC", "Songti SC", serif;
     }
 
-    .status-ready {
-      background: rgba(120, 213, 170, 0.2);
-      color: #cdf5de;
-    }
-
-    .status-failed {
-      background: rgba(255, 120, 120, 0.16);
-      color: #ffd2d2;
-    }
-
-    .back-content {
-      display: grid;
-      gap: 5px;
-      line-height: 1.55;
-      font-size: 0.9rem;
-    }
-
-    .back-content b {
-      color: #f8d699;
-      font-weight: 700;
-      margin-right: 4px;
+    .flashcard-hint {
+      position: absolute;
+      bottom: 8px;
+      font-size: 0.6rem;
+      opacity: 0.45;
+      letter-spacing: 0.05em;
     }
 
     .quiz-options {
@@ -378,10 +365,17 @@
       font-size: 0.92rem;
     }
 
-    @media (max-width: 960px) {
+    @media (max-width: 700px) {
       .core,
       .quick-view {
         grid-column: 1 / -1;
+      }
+      .cards {
+        grid-template-columns: 1fr;
+      }
+      .flashcard {
+        height: 190px;
+        min-height: 190px;
       }
     }
   </style>
@@ -425,8 +419,8 @@
     </section>
 
     <section class="card flashcard-panel">
-      <h2>政策 3D 雙面記憶閃卡（點卡片翻面）</h2>
-      <p>正面看政策名，背面看中學生版白話比喻。</p>
+      <h2>政策記憶閃卡（點擊切換顯示）</h2>
+      <p>點擊卡片切換顯示「政策名」或「中學生版白話比喻」。</p>
       <div class="cards" id="flashcards"></div>
     </section>
 
@@ -494,85 +488,39 @@
       }
     ];
 
-    const flashcardState = new Map();
+    let audioContext = null;
 
-    function defaultGeneratedInfo(item) {
-      return {
-        keyPoint: item.keyPoint || "政策重點尚待補充，請回到正面再翻一次重試。",
-        metaphor: item.metaphor || "白話比喻暫時無法載入。",
-        extensionTip: item.extensionTip || "延伸提示暫時無法載入。"
-      };
-    }
-
-    function generatePolicyInfo(item) {
-      return new Promise((resolve, reject) => {
-        window.setTimeout(() => {
-          if (!item?.policy || !item?.metaphor) {
-            reject(new Error("Missing required policy data."));
-            return;
-          }
-          resolve(defaultGeneratedInfo(item));
-        }, 260);
-      });
-    }
-
-    function statusChipClass(status) {
-      if (status === "loading") return "status-chip status-loading";
-      if (status === "ready") return "status-chip status-ready";
-      return "status-chip status-failed";
-    }
-
-    function statusChipLabel(status) {
-      if (status === "loading") return "生成中";
-      if (status === "ready") return "已生成";
-      return "生成失敗";
-    }
-
-    function backContentHtml(info) {
-      return `
-        <span><b>政策重點：</b>${info.keyPoint}</span>
-        <span><b>白話比喻：</b>${info.metaphor}</span>
-        <span><b>延伸提示：</b>${info.extensionTip}</span>
-      `;
-    }
-
-    function renderBackFace(card, status, info) {
-      const statusEl = card.querySelector(".status-chip");
-      const contentEl = card.querySelector(".back-content");
-      if (!statusEl || !contentEl) return;
-      statusEl.className = statusChipClass(status);
-      statusEl.textContent = statusChipLabel(status);
-      contentEl.innerHTML = backContentHtml(info);
-    }
-
-    async function ensureFlashcardInfo(card, item, cardKey) {
-      const current = flashcardState.get(cardKey);
-      if (current?.status === "loading" || current?.status === "ready") {
-        renderBackFace(card, current.status, current.info);
-        return;
-      }
-
-      const loadingInfo = defaultGeneratedInfo({
-        ...item,
-        keyPoint: "正在整理政策重點...",
-        metaphor: "正在生成白話比喻...",
-        extensionTip: "正在整理延伸提示..."
-      });
-      flashcardState.set(cardKey, { status: "loading", info: loadingInfo });
-      renderBackFace(card, "loading", loadingInfo);
-
+    function playFlipSound() {
       try {
-        const generated = await generatePolicyInfo(item);
-        flashcardState.set(cardKey, { status: "ready", info: generated });
-        renderBackFace(card, "ready", generated);
+        const AudioCtor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtor) return;
+
+        if (!audioContext) {
+          audioContext = new AudioCtor();
+        }
+
+        if (audioContext.state === "suspended") {
+          audioContext.resume();
+        }
+
+        const now = audioContext.currentTime;
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(400, now);
+        oscillator.frequency.exponentialRampToValueAtTime(600, now + 0.08);
+        oscillator.frequency.exponentialRampToValueAtTime(200, now + 0.2);
+
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.15, now + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        oscillator.start(now);
+        oscillator.stop(now + 0.3);
       } catch (error) {
-        const fallback = defaultGeneratedInfo({
-          ...item,
-          keyPoint: "資料載入失敗，已使用預設備援重點。",
-          extensionTip: "請稍後再翻面重試，或檢查資料來源。"
-        });
-        flashcardState.set(cardKey, { status: "failed", info: fallback });
-        renderBackFace(card, "failed", fallback);
         console.error(error);
       }
     }
@@ -609,30 +557,28 @@
         const card = document.createElement("button");
         card.type = "button";
         card.className = "flashcard";
-        card.setAttribute("aria-label", `${item.policy}記憶閃卡，點擊翻面`);
-        const cardKey = `${item.policy}-${index}`;
+        card.setAttribute("aria-pressed", "false");
+        card.setAttribute("aria-label", `${item.policy}記憶閃卡，點擊切換顯示`);
         card.innerHTML = `
-          <span class="flashcard-inner">
-            <span class="face front">
-              <span class="small">${item.cue}</span>
-              <strong>${item.policy}</strong>
-            </span>
-            <span class="face back">
-              <span class="small">翻面後自動生成學習資訊</span>
-              <span class="status-chip status-loading">待生成</span>
-              <span class="back-content">
-                <span><b>政策重點：</b>點擊翻面後載入</span>
-                <span><b>白話比喻：</b>點擊翻面後載入</span>
-                <span><b>延伸提示：</b>點擊翻面後載入</span>
-              </span>
-            </span>
-          </span>
+          <div class="flashcard-layer">
+            <div class="flashcard-cue">${item.cue}</div>
+            <div class="flashcard-text">${item.policy}</div>
+            <div class="flashcard-hint">點擊切換顯示內容</div>
+          </div>
         `;
         card.addEventListener("click", () => {
-          card.classList.toggle("flipped");
-          if (card.classList.contains("flipped")) {
-            ensureFlashcardInfo(card, item, cardKey);
+          const isFlipped = card.classList.toggle("flipped");
+          const layer = card.querySelector(".flashcard-layer");
+          const textEl = card.querySelector(".flashcard-text");
+          if (isFlipped) {
+            textEl.textContent = item.metaphor;
+            layer.setAttribute("aria-label", `白話比喻：${item.metaphor}`);
+          } else {
+            textEl.textContent = item.policy;
+            layer.setAttribute("aria-label", `${item.policy}記憶閃卡`);
           }
+          card.setAttribute("aria-pressed", String(isFlipped));
+          playFlipSound();
         });
         flashcardsEl.appendChild(card);
       });
