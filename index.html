@@ -1,377 +1,464 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>富國強兵策——臣王安石謹呈</title>
+  <title>中史互動學習｜王安石變法</title>
   <style>
     :root {
-      --royal-purple: #31114f;
-      --royal-purple-light: #532a79;
-      --royal-gold: #e8c56a;
-      --royal-gold-soft: #f3e0a7;
-      --paper: #fff9ec;
-      --ink: #2a1b3d;
-      --card-back: #f6ebcd;
-      --correct: #2c7a38;
-      --wrong: #8b1e3f;
+      --space-black: #1d1d1f;
+      --paper-white: #fbfbfd;
+      --mist-gray: #f5f5f7;
+      --vermilion: #b42318;
+      --imperial-gold: #ad7a1f;
+      --text-main: #202124;
+      --text-sub: #5f6368;
+      --radius-xl: 24px;
+      --radius-lg: 20px;
+      --soft-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+      --glass: rgba(255, 255, 255, 0.72);
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: "Noto Serif TC", "PingFang TC", "Microsoft JhengHei", serif;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 20% 10%, #6d3c95 0%, transparent 28%),
-        radial-gradient(circle at 80% 0%, #8753b3 0%, transparent 22%),
-        linear-gradient(180deg, #220a39 0%, #1a082d 100%);
       min-height: 100vh;
-      padding: 2rem 1rem 3rem;
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans CJK TC", "Microsoft JhengHei", sans-serif;
+      background:
+        radial-gradient(circle at 15% -5%, rgba(180, 35, 24, 0.12), transparent 35%),
+        radial-gradient(circle at 90% 0%, rgba(173, 122, 31, 0.14), transparent 30%),
+        linear-gradient(180deg, var(--paper-white) 0%, #f0f2f6 100%);
+      padding: clamp(16px, 2vw, 28px);
     }
 
-    .memorial {
-      max-width: 1050px;
+    .app-shell {
+      max-width: 1180px;
       margin: 0 auto;
-      background: var(--paper);
-      border: 3px solid var(--royal-gold);
-      border-radius: 18px;
-      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+
+    .card {
+      border-radius: var(--radius-xl);
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      box-shadow: var(--soft-shadow);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: clamp(18px, 2.4vw, 28px);
+    }
+
+    .hero {
+      grid-column: 1 / -1;
+      background: linear-gradient(140deg, rgba(29, 29, 31, 0.95), rgba(29, 29, 31, 0.78));
+      color: var(--paper-white);
       overflow: hidden;
+      position: relative;
     }
 
-    .gold-bar {
-      height: 10px;
-      background: linear-gradient(90deg, #b98722, #f1d17e, #b98722);
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 210px;
+      height: 210px;
+      right: -65px;
+      top: -65px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(173, 122, 31, 0.28) 0%, transparent 70%);
     }
 
-    header {
-      background: linear-gradient(145deg, var(--royal-purple), var(--royal-purple-light));
-      color: var(--royal-gold-soft);
-      padding: 1.6rem 1.4rem 2rem;
-      text-align: center;
-      border-bottom: 2px solid var(--royal-gold);
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(251, 251, 253, 0.12);
+      border: 1px solid rgba(251, 251, 253, 0.18);
+      font-size: 0.88rem;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--vermilion);
+      box-shadow: 0 0 0 6px rgba(180, 35, 24, 0.2);
+    }
+
+    h1, h2, h3 {
+      font-family: "Noto Serif TC", "Source Han Serif TC", "Songti SC", serif;
+      margin: 0;
+      letter-spacing: 0.04em;
     }
 
     h1 {
-      margin: 0 0 0.7rem;
-      font-size: clamp(1.4rem, 3vw, 2.2rem);
-      letter-spacing: 0.06em;
-    }
-
-    header p {
-      margin: 0.3rem auto 0;
-      max-width: 840px;
-      line-height: 1.7;
-      color: #f8eecf;
-      font-size: 1rem;
-    }
-
-    .portrait-panel {
-      margin: 1.2rem auto 0;
-      display: grid;
-      gap: 0.8rem;
-      justify-items: center;
-    }
-
-    .file-btn {
-      border: 1px solid var(--royal-gold);
-      background: #f9ecc5;
-      color: #3e1a63;
-      padding: 0.55rem 0.95rem;
-      border-radius: 10px;
-      cursor: pointer;
+      margin-top: 14px;
+      font-size: clamp(1.8rem, 4vw, 2.9rem);
+      line-height: 1.28;
       font-weight: 700;
     }
 
-    #portraitPreview {
-      width: min(260px, 90%);
-      aspect-ratio: 3 / 4;
-      object-fit: cover;
-      border: 2px dashed var(--royal-gold);
-      border-radius: 12px;
-      background: #f8f1dc;
-    }
-
-    main {
-      padding: 1.2rem 1.1rem 2rem;
-      display: grid;
-      gap: 1.2rem;
-    }
-
-    section {
-      border: 1px solid #d8bf7f;
-      border-radius: 14px;
-      padding: 1rem;
-      background: #fffdf7;
-    }
-
     h2 {
-      margin: 0 0 0.6rem;
-      color: #4c236c;
-      font-size: 1.25rem;
+      font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+      margin-bottom: 10px;
+      color: #111;
     }
 
     h3 {
-      margin: 0.6rem 0 0.4rem;
-      color: #5a2d80;
-      font-size: 1.05rem;
+      font-size: 1rem;
+      color: #282a2f;
+      margin-bottom: 8px;
     }
 
-    p, li {
+    p {
+      margin: 0;
       line-height: 1.8;
-      margin: 0.25rem 0;
+      color: var(--text-sub);
     }
 
-    ul {
-      margin: 0.4rem 0 0.2rem 1.2rem;
-      padding: 0;
+    .hero p {
+      color: rgba(251, 251, 253, 0.9);
+      margin-top: 10px;
+      max-width: 860px;
     }
 
-    .trilogy-grid {
+    .core {
+      grid-column: span 7;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 0.8rem;
+      gap: 10px;
+      align-content: start;
     }
 
-    .panel {
-      border: 1px solid #e2ce98;
-      border-radius: 10px;
-      padding: 0.75rem;
-      background: #fffbf0;
+    .insight {
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, #ffffff, #fbfbfd);
+      padding: 14px;
+      border: 1px solid #ececf1;
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+    }
+
+    .insight:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.06);
+    }
+
+    .insight strong { color: var(--space-black); }
+
+    .highlight {
+      color: var(--vermilion);
+      font-weight: 700;
+    }
+
+    .quick-view {
+      grid-column: span 5;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      border: 1px solid #e7e7ee;
+      background: #fff;
+      color: #3d4048;
+    }
+
+    .gold {
+      color: var(--imperial-gold);
+      font-weight: 700;
+    }
+
+    .flashcard-panel,
+    .quiz-panel,
+    .export-panel {
+      grid-column: 1 / -1;
     }
 
     .cards {
+      margin-top: 12px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 0.8rem;
-      margin-top: 0.5rem;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
     }
 
     .flashcard {
-      perspective: 900px;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      perspective: 1000px;
       cursor: pointer;
-      min-height: 150px;
+      min-height: 170px;
+      padding: 0;
     }
 
     .flashcard-inner {
       position: relative;
       width: 100%;
       height: 100%;
-      min-height: 150px;
+      min-height: 170px;
       transform-style: preserve-3d;
-      transition: transform 0.55s ease;
+      transition: transform 0.7s var(--ease);
     }
 
     .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
 
-    .card-face {
+    .face {
       position: absolute;
       inset: 0;
-      border: 1px solid #d8bf7f;
-      border-radius: 12px;
-      padding: 0.8rem;
+      border-radius: 18px;
       backface-visibility: hidden;
+      border: 1px solid #ececf1;
+      padding: 14px;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      text-align: center;
-      font-weight: 700;
-      line-height: 1.6;
+      gap: 8px;
+      box-shadow: var(--soft-shadow);
     }
 
-    .card-front {
-      background: linear-gradient(145deg, #fef6dd, #f7e4ac);
-      color: #5f3600;
+    .front {
+      background: linear-gradient(155deg, #fff, #f4f5f8);
+      color: var(--space-black);
     }
 
-    .card-back {
-      background: var(--card-back);
-      color: #422050;
+    .back {
+      background: linear-gradient(155deg, #1f1f22, #29292d);
+      color: #f3f4f8;
       transform: rotateY(180deg);
-      font-weight: 600;
+    }
+
+    .front .small,
+    .back .small {
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      opacity: 0.78;
     }
 
     .quiz-options {
+      margin-top: 12px;
       display: grid;
-      gap: 0.55rem;
-      margin-top: 0.8rem;
+      gap: 10px;
     }
 
     .quiz-btn {
-      border: 1px solid #ceb372;
-      border-radius: 9px;
-      background: #fff6dc;
-      color: #492864;
-      padding: 0.55rem;
+      border: 1px solid #e6e7ec;
+      background: #fff;
+      border-radius: 14px;
+      padding: 13px 14px;
+      color: #32353c;
       text-align: left;
       cursor: pointer;
-      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s var(--ease);
     }
 
-    .quiz-btn:hover { background: #fdeec4; }
+    .quiz-btn:hover {
+      transform: translateY(-1px);
+      border-color: #d8d9e2;
+      box-shadow: 0 10px 20px rgba(17, 17, 17, 0.05);
+    }
 
     #quizResult {
-      margin-top: 0.9rem;
-      border-radius: 10px;
-      padding: 0.8rem;
+      margin-top: 12px;
+      border-radius: 14px;
+      padding: 14px;
       display: none;
-      line-height: 1.7;
+      line-height: 1.75;
+      border: 1px solid transparent;
     }
 
-    #quizResult.correct {
+    #quizResult.ok {
       display: block;
-      background: #e6f6e9;
-      border: 1px solid #93cf9c;
-      color: var(--correct);
+      background: #eef8f1;
+      border-color: #b8ddc1;
+      color: #1f6f35;
     }
 
-    #quizResult.wrong {
+    #quizResult.no {
       display: block;
-      background: #ffe9ef;
-      border: 1px solid #e2a8b9;
-      color: var(--wrong);
+      background: #fff1f1;
+      border-color: #f0c0c0;
+      color: #963636;
     }
 
-    .csv-wrap { display: grid; gap: 0.6rem; }
+    .export-actions {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
 
-    .csv-btn {
-      width: fit-content;
-      border: none;
+    .btn {
+      border: 0;
       border-radius: 999px;
-      background: linear-gradient(90deg, #5f2b8f, #8d4bc5);
-      color: #fff7d8;
-      font-weight: 700;
-      padding: 0.65rem 1.1rem;
+      padding: 11px 16px;
+      font-weight: 600;
       cursor: pointer;
+      transition: transform 0.25s var(--ease), opacity 0.25s var(--ease);
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    .btn-gimkit {
+      background: linear-gradient(120deg, var(--space-black), #3d3e45);
+      color: var(--paper-white);
+    }
+
+    .btn-quizlet {
+      background: linear-gradient(120deg, #faf0e0, #efd7b0);
+      color: #4b391b;
+      border: 1px solid #e7cfaa;
     }
 
     #copyStatus {
-      min-height: 1.4rem;
-      color: #5a2d80;
-      font-weight: 600;
-      font-size: 0.95rem;
+      margin-top: 12px;
+      min-height: 22px;
+      color: #4a4d56;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 960px) {
+      .core,
+      .quick-view {
+        grid-column: 1 / -1;
+      }
     }
   </style>
 </head>
 <body>
-  <article class="memorial">
-    <div class="gold-bar"></div>
-    <header>
-      <h1>富國強兵策——臣王安石謹呈</h1>
-      <p>陛下，臣以最白話的方式說清楚：現在國家像「家裡花費太大、收入不夠、外面又有人虎視眈眈」，若不立刻改革，百姓更苦、國防更弱。</p>
+  <main class="app-shell">
+    <section class="card hero">
+      <span class="tag"><span class="dot"></span>中史互動學習網頁｜主題：王安石變法</span>
+      <h1>把艱深變法史，翻成你聽得懂的「現代白話」</h1>
+      <p>
+        想像北宋像一家大型公司：收入成長慢，支出卻暴衝，外部競爭（遼夏壓力）又很強。王安石變法就是一套「止血＋升級」方案，目標是先讓公司現金流穩住，再把團隊訓練成可上戰場的戰力。
+      </p>
+    </section>
 
-      <div class="portrait-panel">
-        <label class="file-btn" for="portraitInput">上傳王安石畫像</label>
-        <input id="portraitInput" type="file" accept="image/*" hidden />
-        <img id="portraitPreview" alt="王安石畫像預覽" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='400'%3E%3Crect width='100%25' height='100%25' fill='%23f8f1dc'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237a5b1f' font-size='24'%3E尚未上傳畫像%3C/text%3E%3C/svg%3E" />
+    <section class="card core">
+      <h2>核心史事分析：為何一定要變法？</h2>
+      <article class="insight">
+        <h3>1) <span class="highlight">三冗</span>其實是「企業失控成本」</h3>
+        <p><strong>冗官、冗兵、冗費</strong>可以理解成：員工太多、低效率團隊太大、固定開銷持續上升，最後把整體預算吃光，該投資的地方反而沒錢。</p>
+      </article>
+      <article class="insight">
+        <h3>2) 變法重點不是「猛加稅」</h3>
+        <p>王安石希望用制度修正資源流向，例如讓農民在最缺錢時拿到低息貸款，避免被高利貸綁死，讓生產能轉起來。</p>
+      </article>
+      <article class="insight">
+        <h3>3) 富國和強兵是同一件事</h3>
+        <p>如果財政像漏水桶，軍事就撐不住；若地方組織與訓練不足，戰時再砸錢也來不及。因此變法同時處理財政與動員能力。</p>
+      </article>
+    </section>
+
+    <section class="card quick-view">
+      <h2>一眼看懂變法架構</h2>
+      <p>你可以把它分成兩條主線：<span class="gold">理財線</span>先救現金流，<span class="gold">強兵線</span>再補防務韌性。</p>
+      <div class="chip-row">
+        <span class="chip">青苗法：反高利貸</span>
+        <span class="chip">免役法：勞役制度重整</span>
+        <span class="chip">均輸法：跨區調度穩物價</span>
+        <span class="chip">保甲法：社會基層編組</span>
+        <span class="chip">保馬法：戰時馬匹備援</span>
       </div>
-    </header>
+    </section>
 
-    <main>
-      <section>
-        <h2>呈上朝廷的富國強兵三部曲</h2>
-        <div class="trilogy-grid">
-          <div class="panel">
-            <h3>一、國庫危機：為何會積貧積弱？</h3>
-            <p>白話說，就是「錢不夠用、兵也不夠強」。朝廷開銷大，稅收卻追不上；地方豪強有門路，小民反而借不到錢，結果農業和商業都被拖慢。</p>
-          </div>
-          <div class="panel">
-            <h3>二、理財變法：讓國家先站穩</h3>
-            <ul>
-              <li><strong>青苗法：</strong>春耕前由官府低息借款，讓農民不用被高利貸逼到破產。</li>
-              <li><strong>免役法：</strong>用合理稅額替代雜亂徭役，讓服役更公平，朝廷也有穩定財源。</li>
-              <li><strong>均輸法：</strong>朝廷統籌調度物資，減少中間剝削，平抑物價。</li>
-            </ul>
-          </div>
-          <div class="panel">
-            <h3>三、強兵制度：讓國防可久可用</h3>
-            <ul>
-              <li><strong>保甲法：</strong>把民間編組訓練，平時互助，戰時可迅速動員。</li>
-              <li><strong>保馬法：</strong>鼓勵民間養馬，戰時可補軍馬來源，降低朝廷獨自養馬成本。</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+    <section class="card flashcard-panel">
+      <h2>政策 3D 雙面記憶閃卡（點卡片翻面）</h2>
+      <p>正面看政策名，背面看中學生版白話比喻。</p>
+      <div class="cards" id="flashcards"></div>
+    </section>
 
-      <section>
-        <h2>給陛下備考的 5 張政策閃卡（點一下可翻面）</h2>
-        <div class="cards" id="flashcards"></div>
-      </section>
+    <section class="card quiz-panel">
+      <h2>常見認知迷思測驗（4 選 1）</h2>
+      <p><strong>題目：</strong>下列哪一個說法最符合「王安石變法」的核心目標？</p>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div id="quizResult" aria-live="polite"></div>
+    </section>
 
-      <section>
-        <h2>青苗法理解測驗（4 選 1）</h2>
-        <p><strong>題目：</strong>青苗法最主要想解決下列哪個問題？</p>
-        <div class="quiz-options" id="quizOptions"></div>
-        <div id="quizResult" aria-live="polite"></div>
-      </section>
-
-      <section>
-        <h2>教學工具匯出</h2>
-        <div class="csv-wrap">
-          <button class="csv-btn" id="copyCsvBtn">一鍵複製 Gimkit CSV 題庫</button>
-          <div id="copyStatus"></div>
-        </div>
-      </section>
-    </main>
-  </article>
+    <section class="card export-panel">
+      <h2>教學平台 CSV 自動匯出</h2>
+      <p>可一鍵複製，直接貼進 Gimkit 或 Quizlet 的匯入欄位。</p>
+      <div class="export-actions">
+        <button class="btn btn-gimkit" id="copyGimkitBtn" type="button">複製 Gimkit CSV</button>
+        <button class="btn btn-quizlet" id="copyQuizletBtn" type="button">複製 Quizlet CSV</button>
+      </div>
+      <div id="copyStatus"></div>
+    </section>
+  </main>
 
   <script>
-    const portraitInput = document.getElementById("portraitInput");
-    const portraitPreview = document.getElementById("portraitPreview");
     const flashcardsEl = document.getElementById("flashcards");
     const quizOptionsEl = document.getElementById("quizOptions");
     const quizResultEl = document.getElementById("quizResult");
-    const copyCsvBtn = document.getElementById("copyCsvBtn");
+    const copyGimkitBtn = document.getElementById("copyGimkitBtn");
+    const copyQuizletBtn = document.getElementById("copyQuizletBtn");
     const copyStatus = document.getElementById("copyStatus");
 
     const flashcards = [
       {
         policy: "青苗法",
-        metaphor: "皇上，這像朝廷先借種子錢給農民，等收成後再還，避免被高利貸吃掉。"
+        cue: "理財線",
+        metaphor: "像學校先借你學期必需品基金，期末再還，避免你去借超高利息。"
       },
       {
         policy: "免役法",
-        metaphor: "就像把大家零碎的勞役改成可計算的費用，誰都知道自己要負擔多少。"
-      },
-      {
-        policy: "保甲法",
-        metaphor: "像社區分隊平常就演練，真的有盜賊或戰事時不會手忙腳亂。"
+        cue: "理財線",
+        metaphor: "像把零散義務改成透明費率，大家知道自己要付多少，也比較公平。"
       },
       {
         policy: "均輸法",
-        metaphor: "好比朝廷當大物流，東西缺哪補哪，減少商人哄抬，讓物價穩下來。"
+        cue: "理財線",
+        metaphor: "像大型物流平台調貨，哪裡缺貨就補哪裡，防止中間商亂抬價。"
+      },
+      {
+        policy: "保甲法",
+        cue: "強兵線",
+        metaphor: "像社區平時就編組演練，真有突發狀況才能快速協作，不會全場當機。"
       },
       {
         policy: "保馬法",
-        metaphor: "就像平時分散養車隊，戰時立刻有交通工具，不用臨時高價搶購。"
+        cue: "強兵線",
+        metaphor: "像平時建立交通備援車隊，危機來時不用臨時高價搶資源。"
       }
     ];
 
     const quiz = {
-      question: "青苗法最主要想解決下列哪個問題？",
+      question: "下列哪一個說法最符合王安石變法的核心目標？",
       options: [
         {
-          text: "A. 農民春耕缺資金，只能借高利貸，容易越借越窮。",
+          text: "A. 透過制度改革，先穩住財政，再提升國家動員與防衛能力。",
           correct: true,
-          explanation: "正確。青苗法核心是由官府在農忙前提供較低利借貸，減輕農民被高利貸剝削。"
+          explanation: "正確。變法重點是財政與軍政一起補強，而不是單一政策的短期操作。"
         },
         {
-          text: "B. 強迫農民把所有田地改種朝廷指定作物。",
+          text: "B. 只要增加稅率，其他制度都不必調整。",
           correct: false,
-          explanation: "錯誤。青苗法是貸款政策，不是強制改種政策。"
+          explanation: "迷思。王安石並非只想加稅，而是調整金融、物流、役法與地方組織。"
         },
         {
-          text: "C. 只為了讓朝廷馬上增加軍馬數量。",
+          text: "C. 變法的唯一目的，是把所有商業活動收歸官營。",
           correct: false,
-          explanation: "錯誤。增加軍馬屬於保馬法方向，不是青苗法重點。"
+          explanation: "迷思。變法涉及市場調節，但核心是改善國家治理與資源配置效率。"
         },
         {
-          text: "D. 取消所有稅賦，完全不向百姓收錢。",
+          text: "D. 變法只和軍隊有關，與百姓生活無關。",
           correct: false,
-          explanation: "錯誤。青苗法並非免除全部稅負，而是改善借貸環境與生產循環。"
+          explanation: "迷思。青苗法、免役法等都直接影響農民借貸與勞役負擔。"
         }
       ]
     };
@@ -382,11 +469,17 @@
         const card = document.createElement("button");
         card.type = "button";
         card.className = "flashcard";
-        card.setAttribute("aria-label", `${item.policy}，點擊翻面`);
+        card.setAttribute("aria-label", `${item.policy}記憶閃卡，點擊翻面`);
         card.innerHTML = `
           <span class="flashcard-inner">
-            <span class="card-face card-front">${item.policy}</span>
-            <span class="card-face card-back">${item.metaphor}</span>
+            <span class="face front">
+              <span class="small">${item.cue}</span>
+              <strong>${item.policy}</strong>
+            </span>
+            <span class="face back">
+              <span class="small">中學生白話版</span>
+              <span>${item.metaphor}</span>
+            </span>
           </span>
         `;
         card.addEventListener("click", () => card.classList.toggle("flipped"));
@@ -402,56 +495,61 @@
         btn.className = "quiz-btn";
         btn.textContent = option.text;
         btn.addEventListener("click", () => {
-          quizResultEl.className = option.correct ? "correct" : "wrong";
-          quizResultEl.innerHTML = `<strong>${option.correct ? "答對了！" : "再想想。"}</strong><br>${option.explanation}`;
+          quizResultEl.className = option.correct ? "ok" : "no";
+          quizResultEl.innerHTML = `<strong>${option.correct ? "答對了！" : "這是常見迷思。"}</strong><br>${option.explanation}`;
         });
         quizOptionsEl.appendChild(btn);
       });
     }
 
-    portraitInput.addEventListener("change", (event) => {
-      const file = event.target.files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        portraitPreview.src = e.target?.result || "";
-      };
-      reader.readAsDataURL(file);
-    });
-
     function csvEscape(text) {
       const value = String(text ?? "");
-      return `"${value.replace(/"/g, "\"\"")}"`;
+      return `"${value.replace(/"/g, '""')}"`;
     }
 
     function buildGimkitCsv() {
       const rows = [["Question", "Answer", "Wrong Answer 1", "Wrong Answer 2", "Wrong Answer 3"]];
 
-      flashcards.forEach((card) => {
+      flashcards.forEach((item) => {
         rows.push([
-          `${card.policy}主要在做什麼？`,
-          card.metaphor,
-          "只是為了增加皇宮娛樂活動。",
-          "完全禁止農民與商人交易。",
-          "取消全國所有軍事訓練。"
+          `${item.policy}最貼近哪個白話解釋？`,
+          item.metaphor,
+          "這是用來取消所有稅收的政策。",
+          "這是讓地方完全不需協作的政策。",
+          "這只跟皇宮禮儀有關，與治理無關。"
         ]);
       });
 
-      const correctOption = quiz.options.find((opt) => opt.correct);
-      const wrongOptions = quiz.options.filter((opt) => !opt.correct).map((opt) => opt.text.replace(/^[A-D]\.\s*/, ""));
+      const correct = quiz.options.find((opt) => opt.correct);
+      const wrong = quiz.options.filter((opt) => !opt.correct).map((opt) => opt.text.replace(/^[A-D]\.\s*/, ""));
       rows.push([
         quiz.question,
-        correctOption.text.replace(/^[A-D]\.\s*/, ""),
-        wrongOptions[0] || "",
-        wrongOptions[1] || "",
-        wrongOptions[2] || ""
+        correct ? correct.text.replace(/^[A-D]\.\s*/, "") : "",
+        wrong[0] || "",
+        wrong[1] || "",
+        wrong[2] || ""
       ]);
 
       return rows.map((row) => row.map(csvEscape).join(",")).join("\n");
     }
 
-    async function copyCsv() {
-      const csvText = buildGimkitCsv();
+    function buildQuizletCsv() {
+      const rows = [["Term", "Definition"]];
+      flashcards.forEach((item) => {
+        rows.push([item.policy, item.metaphor]);
+      });
+      rows.push([
+        "三冗",
+        "可比喻為大型企業的冗員、冗支出與低效率編制，長期拖垮財政與決策效能。"
+      ]);
+      rows.push([
+        "王安石變法核心",
+        "先透過制度調整穩定財政，再強化地方組織與軍事動員，達成富國強兵。"
+      ]);
+      return rows.map((row) => row.map(csvEscape).join(",")).join("\n");
+    }
+
+    async function copyCsv(csvText, label) {
       try {
         if (navigator.clipboard?.writeText) {
           await navigator.clipboard.writeText(csvText);
@@ -463,14 +561,16 @@
           document.execCommand("copy");
           temp.remove();
         }
-        copyStatus.textContent = "已複製成功！可直接貼到 Gimkit CSV 匯入。";
+        copyStatus.textContent = `已複製 ${label} CSV，可直接貼到對應平台匯入。`;
       } catch (error) {
-        copyStatus.textContent = "複製失敗，請手動複製：";
+        copyStatus.textContent = `複製 ${label} CSV 失敗，請稍後再試。`;
         console.error(error);
       }
     }
 
-    copyCsvBtn.addEventListener("click", copyCsv);
+    copyGimkitBtn.addEventListener("click", () => copyCsv(buildGimkitCsv(), "Gimkit"));
+    copyQuizletBtn.addEventListener("click", () => copyCsv(buildQuizletCsv(), "Quizlet"));
+
     renderFlashcards();
     renderQuiz();
   </script>
